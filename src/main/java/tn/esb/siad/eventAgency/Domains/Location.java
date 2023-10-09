@@ -3,6 +3,9 @@ package tn.esb.siad.eventAgency.Domains;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data //lombok's annotation to generate getters, setters, required args constructor, toString, equals and hash
 @NoArgsConstructor
@@ -27,5 +30,8 @@ public class Location {
     @NonNull
     private int zipCode;
     private String description;
+    //implement the relationship between Event and Location (1-*)
+    @OneToMany(mappedBy = "eventLocation")
+    private Set<Event> events=new HashSet<>();
 
 }
