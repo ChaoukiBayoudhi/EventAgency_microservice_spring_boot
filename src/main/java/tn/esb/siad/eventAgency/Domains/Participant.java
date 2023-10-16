@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -34,5 +36,9 @@ public class Participant {
     //address_id is the foreign key in the participant table
     //In SQL that annotation is equivalent to : address_id BIGINT references Address(id)
     private Address address;
+
+    //implement the relationship between Participant and Reservation (1-*)
+    @OneToMany(mappedBy = "participant")
+    private Set<Reservation> reservations=new HashSet<>();
 
 }

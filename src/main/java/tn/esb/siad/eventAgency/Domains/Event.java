@@ -37,4 +37,9 @@ public class Event {
     @ManyToMany
     private Set<Organizer> organizers=new HashSet<>();
 
+    //implement the relationship between Event and Reservation (1-*)
+    @OneToMany(mappedBy = "event")
+    private Set<Reservation> reservations=new HashSet<>();
+
+
 }

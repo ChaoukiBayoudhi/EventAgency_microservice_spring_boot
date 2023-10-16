@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class Organizer {
     private Long id;
     private String firstName;
     private String lastName;
+    @Email
     private String email;
     private String phoneNumber;
     @JsonFormat(pattern = "yyyy-MM-dd")
