@@ -2,6 +2,7 @@ package tn.esb.siad.eventAgency.Web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tn.esb.siad.eventAgency.Domains.Event;
 import tn.esb.siad.eventAgency.Services.EventService;
@@ -36,4 +37,14 @@ public class EventController {
     public List<Event> getAllEvents(){
         return eventService.getAllEvents();
     }
+    //get event by id method
+    @GetMapping("/event/{id}")
+    //to invoke this method we need to send a GET request to the url /event/{id}
+    //the {id} is a path variable that can be replaced by an integer value like 1, 11, 5
+    //@PathVariable is used to map the path variable to the method parameter
+    //@PathVariable is used to tell the API that the value of the id is passed through the path
+    public Event getEvent(@PathVariable Long id){
+        return eventService.getEventById(id);
+    }
+    //...
 }
