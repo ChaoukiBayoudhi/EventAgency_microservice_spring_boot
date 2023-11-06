@@ -1,5 +1,6 @@
 package tn.esb.siad.eventAgency.Domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,7 @@ public class Participant {
     @Column(unique = true)
     private String email;
     private String phoneNumber;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     //the photo is stored in the database as a byte array
     @Lob

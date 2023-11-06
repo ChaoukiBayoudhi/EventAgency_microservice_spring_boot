@@ -1,12 +1,11 @@
 package tn.esb.siad.eventAgency.Web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.esb.siad.eventAgency.Domains.Event;
 import tn.esb.siad.eventAgency.Services.EventService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -46,5 +45,31 @@ public class EventController {
     public Event getEvent(@PathVariable Long id){
         return eventService.getEventById(id);
     }
-    //...
+    //to send values to the API we can use one of the following annotations:
+    //@RequestParam is used to map the request parameters to the method parameters
+    //example if we want to pass x=5 and y=7 in the url we can use the following url:
+    //http://localhost:9995/sum?x=5&y=7
+    //we can't use @RequestParam with sensitive data like passwords, ... and with large data
+    //we can use @RequestParam with GET.
+    //@RequestBody is used to map the request body to the method parameter
+    //we can use @RequestBody with POST, PUT, PATCH
+    //we can use @RequestBody to send sensitive data and large data like files, objects, images, ...
+
+    @PostMapping("/event")
+    //@Valid is used to tell the API to validate the request body
+    //if the request body is not valid the API will return a 400 Bad Request error
+    public Event addEvent(@RequestBody @Valid Event event){
+        return eventService.addEvent(event);
+    }
+    //update an event method
+    @PutMapping("/event/{id}")
+    public Event updateEvent(@PathVariable Long id,@RequestBody @Valid Event event){
+        return eventService.updateEvent(event,id);
+    }
+    //delete an event method
+    @DeleteMapping("/event/{id}")
+    public void deleteEvent(@PathVariable Long id){
+        eventService.deleteEvent(id);
+    }
+
 }
