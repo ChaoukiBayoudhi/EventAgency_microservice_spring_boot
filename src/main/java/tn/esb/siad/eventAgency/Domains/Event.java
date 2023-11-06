@@ -1,5 +1,6 @@
 package tn.esb.siad.eventAgency.Domains;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,10 +22,13 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)// the first added event will have id=1, the second id=2, ...
     private Long id;
     @EqualsAndHashCode.Include
+    @NonNull //Lombok's annotation to generate a constructor with all non null arguments
     private String name;
     private String description;
     private String theme;
+    @NonNull
     @EqualsAndHashCode.Include
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private double budget;
     private int nbPlaces;

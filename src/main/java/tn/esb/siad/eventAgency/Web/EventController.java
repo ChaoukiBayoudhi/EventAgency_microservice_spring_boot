@@ -7,6 +7,7 @@ import tn.esb.siad.eventAgency.Services.EventService;
 
 import javax.validation.Valid;
 import java.util.List;
+@RequestMapping("/api/events")
 
 @RestController
 //@RestController is a convenience annotation that is itself annotated with @Controller and @ResponseBody
