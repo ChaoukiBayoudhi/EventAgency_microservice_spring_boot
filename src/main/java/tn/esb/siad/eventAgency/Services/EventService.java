@@ -1,14 +1,20 @@
 package tn.esb.siad.eventAgency.Services;
 
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esb.siad.eventAgency.Domains.Event;
 import tn.esb.siad.eventAgency.Repositories.EventRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class EventService {
     //the service layer is used to implement the business logic
     //the service need to access the repository layer to access the data
@@ -101,4 +107,55 @@ public class EventService {
     public void deleteEvent(Long id){
         eventRepository.deleteById(id);
     }
+    //scheduling : execute a method at a specific time or periodically
+    //we can use @Scheduled annotation to schedule a method
+    //we can use @Scheduled with fixedDelay, fixedRate, cron
+    //fixedDelay is used to execute a method periodically with a fixed delay
+    //fixedRate is used to execute a method periodically with a fixed rate
+    //cron is used to execute a method at a specific time
+    //cron is a string that contains 6 or 7 fields separated by space
+    //the first 5 fields are used to specify the time
+    //the 6th field is used to specify the day of the week
+    //the 7th field is optional and is used to specify the year
+    //the fields are:
+    //1- seconds (0-59)
+    //2- minutes (0-59)
+    //3- hours (0-23)
+    //4- day of month (1-31)
+    //5- month (1-12 or JAN-DEC)
+    //6- day of week (1-7 or SUN-SAT)
+    //7- year (optional)
+    //examples:
+    //1- @Scheduled(fixedDelay = 1000) => execute the method every 1000 milliseconds
+    //2- @Scheduled(fixedRate = 1000) => execute the method every 1000 milliseconds
+    //3- @Scheduled(cron = "0 0 12 * * ?") => execute the method every day at 12:00
+    //4- @Scheduled(cron = "30 0 12 * * ") => execute the method every 30 seconds at 12:00
+    //5- @Scheduled(cron = "15/60 * * ") => execute the method every 15 seconds (15,30,45,00)
+
+    //6- @Scheduled(cron = "0 0 12 * * MON-FRI") => execute the method every day at 12:00 from Monday to Friday
+    //7- @Scheduled(cron = "30 0 12 * * MON-FRI") => execute the method every   30 seconds at 12:00 from Monday to Friday
+    //8- @Scheduled(cron = "0 0 12 * * 2021") => execute the method every day at 12:00 in 2021
+    //9- @Schedule(cron = "15 30 11 7 3 2024) => execute the method every 15 seconds at 11:30 on 7 March 2024 (Thursday)
+    //run the method at the 3 week of each month of 2024 between 12:20 and 15:50
+    //@Scheduled(cron = "0 20-50/30 12 ? 3 2024 3W")
+    //10- @Scheduled(cron = "0 0 12 ? * 3L") => execute the method every day at 12:00 on the last Thursday of each month
+    //11- @Scheduled(cron = "0/30 * * * * ?")=> execute the method every 30 seconds (0,30), the ? is used to specify that the day of the month is not important
+
+    //we can use @Scheduled with void methods that have no parameters
+    //log events that occur after the system date each 30 seconds use log.info, use @slf4j annotation of lombok
+    @Scheduled(fixedDelay = 30 * 1000)
+    public void logEvents(){
+            List<Event> lstRes=eventRepository.findAll().stream()
+            .filter(e->e.getDate().isAfter(LocalDate.now()))
+                    .collect(Collectors.toList());
+        log.info("Events after the system date : {}");
+        for(Event e : lstRes) {
+            Hibernate.initialize(e.getOrganizers());
+            log.info(e.toString());
+        }
+    }
+
+    //
+
+
 }

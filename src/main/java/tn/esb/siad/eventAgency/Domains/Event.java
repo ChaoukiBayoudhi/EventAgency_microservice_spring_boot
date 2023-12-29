@@ -1,6 +1,7 @@
 package tn.esb.siad.eventAgency.Domains;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,11 +39,13 @@ public class Event {
     @JoinColumn(name = "location_id") //this attribute is a foreign key to the location table
     private Location eventLocation;
     //implement the relationship between Event and Organizer (*-*)
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Organizer> organizers=new HashSet<>();
 
     //implement the relationship between Event and Reservation (1-*)
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event",fetch=FetchType.EAGER)
+    @JsonIgnore
     private Set<Reservation> reservations=new HashSet<>();
 
 

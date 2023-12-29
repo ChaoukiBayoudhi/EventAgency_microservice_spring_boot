@@ -8,7 +8,7 @@ import tn.esb.siad.eventAgency.Services.EventService;
 import javax.validation.Valid;
 import java.util.List;
 @RequestMapping("/api/events")
-
+@CrossOrigin("http://localhost:4200")
 @RestController
 //@RestController is a convenience annotation that is itself annotated with @Controller and @ResponseBody
 //we use @RestController instead of @Controller because we want to return a json response (REST API)
@@ -29,8 +29,9 @@ public class EventController {
     // @DeleteMapping is used to map HTTP DELETE requests onto specific handler methods (delete)
 
     //get all events method
-    //to invoke this method we need to send a GET request to the url /events
-    @GetMapping("/events")
+    //to invoke this method we need to send a GET request to the url /
+    //url ="http://localhost:9995/api/events/
+    @GetMapping("/")
     //to get all events we invoke the service using the url :
     //http://localhost:8080/events (by default the port is 8080)
     //in our case the url is http://localhost:9995/events
@@ -72,5 +73,17 @@ public class EventController {
     public void deleteEvent(@PathVariable Long id){
         eventService.deleteEvent(id);
     }
+//call the scheduled service
 
+    //call the scheduled service
+//    @GetMapping("/event/unfinished/{id}/{date}")
+//    public List<Event> getUnfinishedEventsByOrganizerAndDate(@PathVariable Long id,@PathVariable String date){
+//        return eventService.getUnfinishedEventsByOrganizerAndDate(id,date);
+//    }
+    //call the scheduled service logEvents() method
+    @GetMapping("/event/scheduled")
+    private void callScheduledServiceLogEvents()
+    {
+        eventService.logEvents();
+    }
 }
